@@ -1,476 +1,242 @@
-/* ===== RADIO SYSTEM - CLEAN FOCUS ===== */
-@layer components {
-  .radio-group { @apply flex flex-col gap-2; }
-  .radio-item { @apply flex items-center gap-2 cursor-pointer select-none relative; }
-  
-  .radio-item input[type="radio"] {
-    @apply appearance-none w-5 h-5 rounded-full border border-(--color-border) 
-           checked:bg-(--color-primary) checked:border-(--color-primary) 
-           transition-all duration-200;
-    box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--color-text), transparent 90%);
-  }
-  
-  /* FIXED: Clean single focus ring */
-  .radio-item input[type="radio"]:focus-visible {
-    @apply outline-none;
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 20%, transparent);
-  }
-  
-  .radio-label { @apply text-(--color-text) select-none transition-colors; }
-  .radio-item input[type="radio"]:disabled + .radio-label {
-    @apply opacity-50 cursor-not-allowed;
-  }
-  .radio-group.horizontal { @apply flex-row gap-4; }
+import React, { useState, useEffect } from 'react'
+import { Eye, EyeOff, Mail, Lock, Globe, X } from 'lucide-react'
 
-  /* ===== CHECKBOX SYSTEM - CLEAN FOCUS ===== */
-  input[type="checkbox"] {
-    @apply w-5 h-5 m-0 align-middle border-2 rounded border-(--color-border) 
-           bg-(--color-surface) cursor-pointer relative appearance-none;
-    box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--color-text), transparent 90%);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  input[type="checkbox"]::after {
-    content: '';
-    @apply absolute hidden top-[2px] left-[5px] w-1 h-2 
-           border-r-2 border-b-2 border-(--color-surface) rotate-45;
-  }
-  
-  input[type="checkbox"]:checked::after { @apply block; }
-  
-  /* FIXED: Clean single focus ring */
-  input[type="checkbox"]:focus-visible {
-    @apply outline-none;
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 20%, transparent);
-  }
-  
-  /* Variants - keep same class names */
-  input[type="checkbox"].primary:checked { 
-    background-color: var(--color-primary); 
-    border-color: var(--color-primary); 
-  }
-  input[type="checkbox"].secondary:checked { 
-    background-color: var(--color-secondary); 
-    border-color: var(--color-secondary); 
-  }
-  input[type="checkbox"].success:checked { 
-    background-color: var(--color-success); 
-    border-color: var(--color-success); 
-  }
-  input[type="checkbox"].warning:checked { 
-    background-color: var(--color-warning); 
-    border-color: var(--color-warning); 
-  }
-  input[type="checkbox"].danger:checked { 
-    background-color: var(--color-danger); 
-    border-color: var(--color-danger); 
-  }
-  input[type="checkbox"].info:checked { 
-    background-color: var(--color-info); 
-    border-color: var(--color-info); 
-  }
-  
-  input[type="checkbox"]:disabled { 
-    @apply opacity-50 cursor-not-allowed; 
+export default function App() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    rememberMe: false
+  })
+  const [showPassword, setShowPassword] = useState(false)
+  const [errors, setErrors] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [theme, setTheme] = useState('dolphin')
+  const [mode, setMode] = useState('light')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'dolphin'
+    const savedMode = localStorage.getItem('mode') || 'light'
+    setTheme(savedTheme)
+    setMode(savedMode)
+    document.documentElement.setAttribute('data-theme', savedTheme)
+    document.documentElement.setAttribute('data-theme-mode', savedMode)
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dolphin' ? 'danphe' : 'dolphin'
+    setTheme(newTheme)
+    document.documentElement.setAttribute('data-theme', newTheme)
+    localStorage.setItem('theme', newTheme)
   }
 
-  /* ===== SELECT SYSTEM - CLEAN FOCUS ===== */
-  .select-wrapper { @apply relative inline-block w-full; }
-  
-  .select {
-    @apply w-full px-3 py-2 text-base rounded-md border-2 
-           border-(--color-border) bg-(--color-surface) 
-           text-(--color-text) cursor-pointer appearance-none;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 2.75rem;
-  }
-  
-  /* FIXED: Single clean focus style */
-  .select:focus {
-    @apply outline-none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
-  }
-  
-  .select:disabled {
-    @apply opacity-50 cursor-not-allowed 
-           bg-[color-mix(in_srgb,var(--color-surface),black_2%)] 
-           text-(--color-border);
-  }
-  
-  /* Variants - same class names */
-  .select.primary { 
-    border-color: var(--color-primary); 
-    background-color: color-mix(in srgb, var(--color-primary) 5%, transparent); 
-  }
-  .select.primary:focus { 
-    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent); 
-  }
-  
-  .select.secondary { 
-    border-color: var(--color-secondary); 
-    background-color: color-mix(in srgb, var(--color-secondary) 5%, transparent); 
-  }
-  .select.success { 
-    border-color: var(--color-success); 
-    background-color: color-mix(in srgb, var(--color-success) 5%, transparent); 
-  }
-  .select.warning { 
-    border-color: var(--color-warning); 
-    background-color: color-mix(in srgb, var(--color-warning) 5%, transparent); 
-  }
-  .select.danger { 
-    border-color: var(--color-danger); 
-    background-color: color-mix(in srgb, var(--color-danger) 5%, transparent); 
-  }
-  .select.info { 
-    border-color: var(--color-info); 
-    background-color: color-mix(in srgb, var(--color-info) 5%, transparent); 
-  }
-  
-  .select.gradient.primary { 
-    background-image: var(--gradient-primary); 
-    color: var(--color-text); 
-    border: none; 
-    box-shadow: 0 2px 4px color-mix(in srgb, black 10%, transparent); 
-  }
-  
-  .select-wrapper::after {
-    content: '';
-    @apply absolute top-1/2 right-4 w-2 h-2 
-           border-r-2 border-b-2 border-(--color-text) 
-           pointer-events-none -translate-y-1/2 rotate-45;
-    opacity: 0.6;
+  const toggleMode = () => {
+    const newMode = mode === 'light' ? 'dark' : 'light'
+    setMode(newMode)
+    document.documentElement.setAttribute('data-theme-mode', newMode)
+    localStorage.setItem('mode', newMode)
   }
 
-  /* ===== FLOATING LABEL - CLEAN FOCUS ===== */
-  .floatinglabel {
-    @apply relative w-full;
+  const validateForm = () => {
+    const newErrors = {}
+    if (!formData.email) newErrors.email = 'Email चाहिन्छ'
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'कृपया मान्य ईमेल ठेगाना राख्नुहोस्'
+    if (!formData.password) newErrors.password = 'पासवर्ड चाहिन्छ'
+    else if (formData.password.length < 6) newErrors.password = 'पासवर्ड कम्तीमा ६ क्यारेक्टर हुनुपर्छ'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
-  .floatinglabel-input {
-    @apply w-full px-3 py-2 text-base rounded-md border-2 
-           border-(--color-border) bg-(--color-surface) text-(--color-text);
-    min-height: 3rem;
-    z-index: 0;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    line-height: 1.5;
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!validateForm()) return
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+      alert('सफलतापूर्वक लगइन भयो!')
+    }, 2000)
   }
 
-  /* FIXED: Clean focus with single ring */
-  .floatinglabel-input:focus {
-    @apply outline-none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
-  }
-  
-  .floatinglabel-input:focus-visible {
-    @apply outline-none;
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  .floatinglabel-input:disabled {
-    @apply opacity-50 cursor-not-allowed 
-           bg-[color-mix(in_srgb,var(--color-surface),black_2%)] 
-           text-(--color-border);
-    border-color: color-mix(in srgb, var(--color-border), transparent 20%) !important;
-  }
+  return (
+    <div className="min-h-screen w-full bg-surface relative">
+      {/* Theme Toggle Buttons */}
+      <div className="fixed top-4 right-4 flex gap-2 z-[100]">
+        <button
+          onClick={toggleTheme}
+          className="circle sm glass outlined primary glow"
+          title={theme === 'dolphin' ? 'Switch to Danphe' : 'Switch to Dolphin'}
+        >
+          {theme === 'dolphin' ? '🐬' : '🇳🇵'}
+        </button>
+        <button
+          onClick={toggleMode}
+          className="circle sm glass outlined primary glow"
+          title={mode === 'light' ? 'Dark Mode' : 'Light Mode'}
+        >
+          {mode === 'light' ? '☀️' : '🌙'}
+        </button>
+      </div>
 
-  /* Label styles unchanged */
-  .floatinglabel-label {
-    @apply absolute left-3 top-1/2 -translate-y-1/2
-           text-(--color-text-muted) text-base
-           pointer-events-none bg-transparent;
-    background-color: var(--color-surface) !important;
-    padding: 0 4px;
-    z-index: 100;
-    line-height: 1.1;
-    transition: 
-      top 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+      {/* Main Content */}
+      <div className="flex items-center justify-center min-h-screen w-full p-4 sm:p-6 md:p-8">
+        <div className="card glass glow pulse w-full max-w-md mx-auto relative z-10">
+          <div className="p-6 sm:p-8">
+            {/* Header */}
+            <div className="flex flex-col items-center mb-6">
+              <div className="circle md glass filled primary glow text-2xl mb-3">
+                {theme === 'dolphin' ? '🐬' : '🇳🇵'}
+              </div>
 
-  .floatinglabel-input:focus ~ .floatinglabel-label,
-  .floatinglabel-input:not(:placeholder-shown) ~ .floatinglabel-label {
-    top: 0 !important;
-    transform: translateY(0) !important;
-    font-size: 0.875rem;
-    color: var(--color-primary);
-    left: 0.75rem !important;
-  }
+              <h1
+                className="text-3xl font-bold text-center mb-2"
+                style={{ color: 'var(--color-primary)' }}
+              >
+                DolphinCSS
+              </h1>
 
-  /* आइकन भएको बेला लेबलको सुरुवाती स्थान मिलाउने */
-  .floatinglabel.input-icon-left .floatinglabel-label,
-  .floatinglabel.input-icon-both .floatinglabel-label {
-    left: 2.75rem;
-  }
+              <p
+                className="text-sm text-center"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
+                {theme === 'dolphin'
+                  ? '🌊 Smooth like an ocean'
+                  : '🏔️ Strong like the Himalayas'}
+              </p>
+              <p
+                className="text-sm text-center mt-1"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
+                आफ्नो खातामा साइन इन गर्नुहोस्
+              </p>
+            </div>
 
-  /* फोकस वा टेक्स्ट भएपछि लेबल बायाँ सर्ने */
-  .floatinglabel.input-icon-left .floatinglabel-input:focus ~ .floatinglabel-label,
-  .floatinglabel.input-icon-left .floatinglabel-input:not(:placeholder-shown) ~ .floatinglabel-label,
-  .floatinglabel.input-icon-both .floatinglabel-input:focus ~ .floatinglabel-label,
-  .floatinglabel.input-icon-both .floatinglabel-input:not(:placeholder-shown) ~ .floatinglabel-label {
-    left: 0.75rem !important;
-  }
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {/* Email Field */}
+              <div>
+                <div className="input-icon-left">
+                  <Mail size={18} />
+                  <input
+                    type="email"
+                    id="email"
+                    className="w-full floatinglabel-input"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    placeholder=" "
+                  />
+                  <label htmlFor="email" className="floatinglabel-label" style={{ left: '3rem' }}>
+                    ईमेल ठेगाना
+                  </label>
+                </div>
+                {errors.email && <span className="text-sm color-danger mt-1 block">{errors.email}</span>}
+              </div>
 
-  /* ===== STANDARD LABEL - CLEAN FOCUS ===== */
-  .standardlabel {
-    @apply relative w-full;
-  }
+              {/* Password Field */}
+              <div>
+                <div className="input-icon-both">
+                  <Lock size={18} className="icon-left" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    className="w-full floatinglabel-input"
+                    value={formData.password}
+                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    placeholder=" "
+                  />
+                  <label htmlFor="password" className="floatinglabel-label" style={{ left: '3rem' }}>
+                    पासवर्ड
+                  </label>
+                  <button
+                    type="button"
+                    className="icon-right"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                {errors.password && <span className="text-sm color-danger mt-1 block">{errors.password}</span>}
+              </div>
 
-  .standardlabel-input {
-    border-bottom: 2px solid var(--color-border) !important;
-    border-radius: 0 !important;
-    outline: none !important;
-    min-height: 2.75rem;
-    transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 0;
-    line-height: 1.5;
-    
-    /* क्लिक/ट्याप गर्दा कुनै पनि ring हटाउने */
-    -webkit-tap-highlight-color: transparent !important;
-  }
+              {/* Remember Me & Forgot Password */}
+              <div className="flex justify-between items-center">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={formData.rememberMe}
+                    onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
+                    style={{ appearance: 'checkbox' }}
+                  />
+                  मलाई सम्झनुहोस्
+                </label>
+                <button
+                  type="button"
+                  className="text-sm hover:underline bg-transparent border-none cursor-pointer"
+                  style={{ color: 'var(--color-primary)' }}
+                >
+                  पासवर्ड बिर्सनुभयो?
+                </button>
+              </div>
 
-  /* FIXED: Standard label लागि मात्र तलको underline, ring हटाउने */
-  .standardlabel-input:focus {
-    @apply outline-none;
-    border-color: var(--color-primary) !important;
-    border-width: 0 0 2px 0 !important;
-    /* Ring हटाउने र मात्र तलको shadow राख्ने */
-    box-shadow: 0 2px 0 0 var(--color-primary) !important;
-  }
-  
-  /* Focus-visible पनि fix गर्ने */
-  .standardlabel-input:focus-visible {
-    @apply outline-none;
-    box-shadow: 0 2px 0 0 var(--color-primary) !important;
-  }
-  
-  /* Active state पनि fix गर्ने */
-  .standardlabel-input:active {
-    @apply outline-none;
-    box-shadow: 0 2px 0 0 var(--color-primary) !important;
-  }
-  
-  .standardlabel-input:disabled {
-    @apply opacity-50 cursor-not-allowed text-(--color-border);
-    border-color: color-mix(in srgb, var(--color-border), transparent 20%) !important;
-  }
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`filled primary btn-md w-full${isLoading ? ' loading' : ''}`}
+              >
+                {isLoading ? 'लगइन हुँदै...' : 'साइन इन गर्नुहोस्'}
+              </button>
+            </form>
 
-  .standardlabel-label {
-    @apply absolute left-3 top-1/2 -translate-y-1/2
-           text-(--color-text-muted) text-base
-           pointer-events-none bg-transparent;
-    background-color: var(--color-surface) !important;
-    padding: 0 4px;
-    z-index: 100;
-    line-height: 1.1;
-    transition: 
-      top 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-      left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-1 h-px" style={{ backgroundColor: 'var(--color-border)' }}></div>
+              <span className="px-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>वा</span>
+              <div className="flex-1 h-px" style={{ backgroundColor: 'var(--color-border)' }}></div>
+            </div>
 
-  .standardlabel-input:focus ~ .standardlabel-label,
-  .standardlabel-input:not(:placeholder-shown) ~ .standardlabel-label {
-    top: 0 !important;
-    transform: translateY(0) !important;
-    font-size: 0.875rem;
-    color: var(--color-primary);
-    left: 0.75rem !important;
-  }
+            {/* Social Login */}
+            <div className="flex flex-col gap-3">
+              <button className="glass outlined primary btn-md w-full button-icon-left">
+                <Globe size={18} />
+                Google मार्फत जारी राख्नुहोस्
+              </button>
+              <button className="glass outlined primary btn-md w-full button-icon-left">
+                <X size={18} />
+                X मार्फत जारी राख्नुहोस्
+              </button>
+            </div>
 
-  /* ===== REGULAR INPUTS WITH ICONS - CLEAN FOCUS ===== */
-  .input-icon-left {
-    @apply relative w-full;
-  }
-  .input-icon-left > svg {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-(--color-text-muted);
-    z-index: 10;
-  }
-  .input-icon-left > input,
-  .input-icon-left > select {
-    @apply w-full pl-10 pr-3 py-2 rounded-md border-2 
-           border-(--color-border) bg-(--color-surface);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* FIXED: Clean focus for icon inputs */
-  .input-icon-left > input:focus,
-  .input-icon-left > select:focus {
-    @apply outline-none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
-  }
+            {/* Sign Up Link */}
+            <p className="text-center mt-6 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              खाता छैन?{' '}
+              <button
+                className="font-bold bg-transparent border-none cursor-pointer hover:underline"
+                style={{ color: 'var(--color-primary)' }}
+              >
+                साइन अप गर्नुहोस्
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
 
-  .input-icon-right {
-    @apply relative w-full;
-  }
-  .input-icon-right > svg {
-    @apply absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-(--color-text-muted);
-    z-index: 10;
-  }
-  .input-icon-right > input,
-  .input-icon-right > select {
-    @apply w-full pl-3 pr-10 py-2 rounded-md border-2 
-           border-(--color-border) bg-(--color-surface);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* FIXED: Clean focus for icon inputs */
-  .input-icon-right > input:focus,
-  .input-icon-right > select:focus {
-    @apply outline-none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
-  }
-
-  .input-icon-both {
-    @apply relative w-full;
-  }
-  .input-icon-both > .icon-left {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 
-           w-5 h-5 text-(--color-text-muted) pointer-events-none z-20;
-  }
-  .input-icon-both > .icon-right {
-    @apply absolute right-3 top-1/2 -translate-y-1/2 
-           w-5 h-5 text-(--color-text-muted) cursor-pointer z-30;
-    pointer-events: auto;
-  }
-  .input-icon-both > input,
-  .input-icon-both > select {
-    @apply w-full pl-10 pr-10 py-2 rounded-md border-2 
-           border-(--color-border) bg-(--color-surface);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* FIXED: Clean focus for both icon inputs */
-  .input-icon-both > input:focus,
-  .input-icon-both > select:focus {
-    @apply outline-none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
-  }
-
-  /* ===== THEME-AWARE FOCUS STYLES ===== */
-  /* Danphe theme लाई अलग focus style */
-  [data-theme="danphe"] {
-    /* Radio focus */
-    .radio-item input[type="radio"]:focus-visible {
-      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 20%, transparent);
-    }
-    
-    /* Checkbox focus */
-    input[type="checkbox"]:focus-visible {
-      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 20%, transparent);
-    }
-    
-    /* Select focus */
-    .select:focus {
-      border-color: var(--color-danphe-primary);
-      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 15%, transparent);
-    }
-    
-    /* Floating label focus */
-    .floatinglabel-input:focus {
-      border-color: var(--color-danphe-primary);
-      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 15%, transparent);
-    }
-    
-    .floatinglabel-input:focus ~ .floatinglabel-label {
-      color: var(--color-danphe-primary);
-    }
-    
-    /* Standard label focus - ring हटाउने */
-    .standardlabel-input:focus {
-      border-color: var(--color-danphe-primary) !important;
-      box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
-    }
-    
-    .standardlabel-input:focus-visible {
-      box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
-    }
-    
-    .standardlabel-input:active {
-      box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
-    }
-    
-    .standardlabel-input:focus ~ .standardlabel-label {
-      color: var(--color-danphe-primary);
-    }
-    
-    /* Icon inputs focus */
-    .input-icon-left > input:focus,
-    .input-icon-left > select:focus,
-    .input-icon-right > input:focus,
-    .input-icon-right > select:focus,
-    .input-icon-both > input:focus,
-    .input-icon-both > select:focus {
-      border-color: var(--color-danphe-primary);
-      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 15%, transparent);
-    }
-  }
-
-  /* Dark mode adjustments */
-  [data-theme-mode="dark"] {
-    /* Focus rings अझ soft बनाउने */
-    .radio-item input[type="radio"]:focus-visible,
-    input[type="checkbox"]:focus-visible,
-    .select:focus,
-    .floatinglabel-input:focus,
-    .input-icon-left > input:focus,
-    .input-icon-left > select:focus,
-    .input-icon-right > input:focus,
-    .input-icon-right > select:focus,
-    .input-icon-both > input:focus,
-    .input-icon-both > select:focus {
-      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 25%, transparent);
-    }
-    
-    /* Standard label dark mode - ring हटाउने */
-    .standardlabel-input:focus {
-      box-shadow: 0 2px 0 0 var(--color-primary) !important;
-    }
-    
-    .standardlabel-input:focus-visible {
-      box-shadow: 0 2px 0 0 var(--color-primary) !important;
-    }
-    
-    .standardlabel-input:active {
-      box-shadow: 0 2px 0 0 var(--color-primary) !important;
-    }
-    
-    /* Danphe theme dark mode */
-    [data-theme="danphe"] & {
-      .radio-item input[type="radio"]:focus-visible,
-      input[type="checkbox"]:focus-visible,
-      .select:focus,
-      .floatinglabel-input:focus,
-      .input-icon-left > input:focus,
-      .input-icon-left > select:focus,
-      .input-icon-right > input:focus,
-      .input-icon-right > select:focus,
-      .input-icon-both > input:focus,
-      .input-icon-both > select:focus {
-        box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 25%, transparent);
-      }
-      
-      /* Standard label dark mode Danphe */
-      .standardlabel-input:focus {
-        box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
-      }
-      
-      .standardlabel-input:focus-visible {
-        box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
-      }
-      
-      .standardlabel-input:active {
-        box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
-      }
-    }
-  }
+      {/* Decorative Background */}
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div
+          className="absolute -top-80 lg:-top-96 -left-80 lg:-left-96 w-[600px] lg:w-[800px] h-[600px] lg:h-[800px] rounded-full blur-3xl opacity-20 animate-pulse"
+          style={{ backgroundColor: 'var(--color-primary)' }}
+        />
+        <div
+          className="absolute -bottom-80 lg:-bottom-96 -right-80 lg:-right-96 w-[600px] lg:w-[800px] h-[600px] lg:h-[800px] rounded-full blur-3xl opacity-20 animate-pulse"
+          style={{ backgroundColor: 'var(--color-secondary)', animationDelay: '1s' }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] rounded-full blur-3xl opacity-10 animate-pulse"
+          style={{ backgroundColor: 'var(--color-accent)', animationDelay: '2s' }}
+        />
+      </div>
+    </div>
+  )
 }
