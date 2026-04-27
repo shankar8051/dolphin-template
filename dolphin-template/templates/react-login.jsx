@@ -1,197 +1,476 @@
-import React, { useState, useEffect } from 'react'
-import { Eye, EyeOff, Mail, Lock, Globe, X } from 'lucide-react'
+/* ===== RADIO SYSTEM - CLEAN FOCUS ===== */
+@layer components {
+  .radio-group { @apply flex flex-col gap-2; }
+  .radio-item { @apply flex items-center gap-2 cursor-pointer select-none relative; }
+  
+  .radio-item input[type="radio"] {
+    @apply appearance-none w-5 h-5 rounded-full border border-(--color-border) 
+           checked:bg-(--color-primary) checked:border-(--color-primary) 
+           transition-all duration-200;
+    box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--color-text), transparent 90%);
+  }
+  
+  /* FIXED: Clean single focus ring */
+  .radio-item input[type="radio"]:focus-visible {
+    @apply outline-none;
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 20%, transparent);
+  }
+  
+  .radio-label { @apply text-(--color-text) select-none transition-colors; }
+  .radio-item input[type="radio"]:disabled + .radio-label {
+    @apply opacity-50 cursor-not-allowed;
+  }
+  .radio-group.horizontal { @apply flex-row gap-4; }
 
-export default function App() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [errors, setErrors] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [theme, setTheme] = useState('dolphin')
-  const [mode, setMode] = useState('light')
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'dolphin'
-    const savedMode = localStorage.getItem('mode') || 'light'
-    setTheme(savedTheme)
-    setMode(savedMode)
-    document.documentElement.setAttribute('data-theme', savedTheme)
-    document.documentElement.setAttribute('data-theme-mode', savedMode)
-  }, [])
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dolphin' ? 'danphe' : 'dolphin'
-    console.log('Switching theme to:', newTheme)
-    setTheme(newTheme)
-    document.documentElement.setAttribute('data-theme', newTheme)
-    localStorage.setItem('theme', newTheme)
+  /* ===== CHECKBOX SYSTEM - CLEAN FOCUS ===== */
+  input[type="checkbox"] {
+    @apply w-5 h-5 m-0 align-middle border-2 rounded border-(--color-border) 
+           bg-(--color-surface) cursor-pointer relative appearance-none;
+    box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--color-text), transparent 90%);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  input[type="checkbox"]::after {
+    content: '';
+    @apply absolute hidden top-[2px] left-[5px] w-1 h-2 
+           border-r-2 border-b-2 border-(--color-surface) rotate-45;
+  }
+  
+  input[type="checkbox"]:checked::after { @apply block; }
+  
+  /* FIXED: Clean single focus ring */
+  input[type="checkbox"]:focus-visible {
+    @apply outline-none;
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 20%, transparent);
+  }
+  
+  /* Variants - keep same class names */
+  input[type="checkbox"].primary:checked { 
+    background-color: var(--color-primary); 
+    border-color: var(--color-primary); 
+  }
+  input[type="checkbox"].secondary:checked { 
+    background-color: var(--color-secondary); 
+    border-color: var(--color-secondary); 
+  }
+  input[type="checkbox"].success:checked { 
+    background-color: var(--color-success); 
+    border-color: var(--color-success); 
+  }
+  input[type="checkbox"].warning:checked { 
+    background-color: var(--color-warning); 
+    border-color: var(--color-warning); 
+  }
+  input[type="checkbox"].danger:checked { 
+    background-color: var(--color-danger); 
+    border-color: var(--color-danger); 
+  }
+  input[type="checkbox"].info:checked { 
+    background-color: var(--color-info); 
+    border-color: var(--color-info); 
+  }
+  
+  input[type="checkbox"]:disabled { 
+    @apply opacity-50 cursor-not-allowed; 
   }
 
-  const toggleMode = () => {
-    const newMode = mode === 'light' ? 'dark' : 'light'
-    console.log('Switching mode to:', newMode)
-    setMode(newMode)
-    document.documentElement.setAttribute('data-theme-mode', newMode)
-    localStorage.setItem('mode', newMode)
+  /* ===== SELECT SYSTEM - CLEAN FOCUS ===== */
+  .select-wrapper { @apply relative inline-block w-full; }
+  
+  .select {
+    @apply w-full px-3 py-2 text-base rounded-md border-2 
+           border-(--color-border) bg-(--color-surface) 
+           text-(--color-text) cursor-pointer appearance-none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 2.75rem;
+  }
+  
+  /* FIXED: Single clean focus style */
+  .select:focus {
+    @apply outline-none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
+  }
+  
+  .select:disabled {
+    @apply opacity-50 cursor-not-allowed 
+           bg-[color-mix(in_srgb,var(--color-surface),black_2%)] 
+           text-(--color-border);
+  }
+  
+  /* Variants - same class names */
+  .select.primary { 
+    border-color: var(--color-primary); 
+    background-color: color-mix(in srgb, var(--color-primary) 5%, transparent); 
+  }
+  .select.primary:focus { 
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent); 
+  }
+  
+  .select.secondary { 
+    border-color: var(--color-secondary); 
+    background-color: color-mix(in srgb, var(--color-secondary) 5%, transparent); 
+  }
+  .select.success { 
+    border-color: var(--color-success); 
+    background-color: color-mix(in srgb, var(--color-success) 5%, transparent); 
+  }
+  .select.warning { 
+    border-color: var(--color-warning); 
+    background-color: color-mix(in srgb, var(--color-warning) 5%, transparent); 
+  }
+  .select.danger { 
+    border-color: var(--color-danger); 
+    background-color: color-mix(in srgb, var(--color-danger) 5%, transparent); 
+  }
+  .select.info { 
+    border-color: var(--color-info); 
+    background-color: color-mix(in srgb, var(--color-info) 5%, transparent); 
+  }
+  
+  .select.gradient.primary { 
+    background-image: var(--gradient-primary); 
+    color: var(--color-text); 
+    border: none; 
+    box-shadow: 0 2px 4px color-mix(in srgb, black 10%, transparent); 
+  }
+  
+  .select-wrapper::after {
+    content: '';
+    @apply absolute top-1/2 right-4 w-2 h-2 
+           border-r-2 border-b-2 border-(--color-text) 
+           pointer-events-none -translate-y-1/2 rotate-45;
+    opacity: 0.6;
   }
 
-  const validateForm = () => {
-    const newErrors = {}
-    if (!formData.email) newErrors.email = 'Email is required'
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Please enter a valid email address'
-    if (!formData.password) newErrors.password = 'Password is required'
-    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+  /* ===== FLOATING LABEL - CLEAN FOCUS ===== */
+  .floatinglabel {
+    @apply relative w-full;
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!validateForm()) return
-
-    console.log('Form Data:', formData)
-
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-      alert('Login successful!')
-    }, 2000)
+  .floatinglabel-input {
+    @apply w-full px-3 py-2 text-base rounded-md border-2 
+           border-(--color-border) bg-(--color-surface) text-(--color-text);
+    min-height: 3rem;
+    z-index: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1.5;
   }
 
-  const handleInputChange = (field, value) => {
-    console.log('Form data changed:', field, value)
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }))
+  /* FIXED: Clean focus with single ring */
+  .floatinglabel-input:focus {
+    @apply outline-none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
+  }
+  
+  .floatinglabel-input:focus-visible {
+    @apply outline-none;
   }
 
-  return (
-    <div className="bg-surface">
-      <div className="container">
-        <div className="fixed top-4 right-4 flex gap-2 z-50">
-          <button onClick={toggleTheme} className="glass btn-sm glow" title={`Theme: ${theme === 'dolphin' ? '🌊 Dolphin' : '🇳🇵 Danphe'}`}>
-            {theme === 'dolphin' ? '🌊' : '🇳🇵'}
-          </button>
-          <button onClick={toggleMode} className="glass btn-sm glow" title={`Mode: ${mode === 'light' ? '☀️ Light' : '🌙 Dark'}`}>
-            {mode === 'light' ? '☀️' : '🌙'}
-          </button>
-        </div>
+  .floatinglabel-input:disabled {
+    @apply opacity-50 cursor-not-allowed 
+           bg-[color-mix(in_srgb,var(--color-surface),black_2%)] 
+           text-(--color-border);
+    border-color: color-mix(in srgb, var(--color-border), transparent 20%) !important;
+  }
 
-        <div className="flex items-center justify-center p-4 sm:p-8 min-h-screen w-full">
-          <div className="glass card glow pulse w-full max-w-md mx-auto">
-            <div className="p-6 sm:p-8">
-              <div className="flex flex-col items-center mb-6">
-                <div className="flex items-center justify-center gap-3 mb-2">
-                  <div className="circle md glass filled primary glow text-xl">
-                    {theme === 'dolphin' ? '🐬' : '🇳🇵'}
-                  </div>
-                  <h1 className="text-2xl font-bold m-0 text-primary">
-                    DolphinCSS
-                  </h1>
-                </div>
-                <p className="text-muted m-0 text-center">Sign in to your account</p>
-              </div>
+  /* Label styles unchanged */
+  .floatinglabel-label {
+    @apply absolute left-3 top-1/2 -translate-y-1/2
+           text-(--color-text-muted) text-base
+           pointer-events-none bg-transparent;
+    background-color: var(--color-surface) !important;
+    padding: 0 4px;
+    z-index: 100;
+    line-height: 1.1;
+    transition: 
+      top 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="floatinglabel input-icon-left">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary z-10 cursor-pointer" />
-                  <input 
-                    type="email" 
-                    id="email" 
-                    className="floatinglabel-input lg"
-                    style={{ paddingLeft: '3rem' }}
-                    value={formData.email} 
-                    onChange={(e) => handleInputChange('email', e.target.value)} 
-                    placeholder=" " 
-                    required
-                  />
-                  <label htmlFor="email" className="floatinglabel-label">Email Address</label>
-                </div>
-                {errors.email && <p className="bg-danger color-text-light text-sm m-1 m-0">{errors.email}</p>}
+  .floatinglabel-input:focus ~ .floatinglabel-label,
+  .floatinglabel-input:not(:placeholder-shown) ~ .floatinglabel-label {
+    top: 0 !important;
+    transform: translateY(0) !important;
+    font-size: 0.875rem;
+    color: var(--color-primary);
+    left: 0.75rem !important;
+  }
 
-                <div className="floatinglabel input-icon-both">
-                  <Lock size={18} className="icon-left text-primary cursor-pointer" />
-                  <input 
-                    type={showPassword ? 'text' : 'password'} 
-                    id="password" 
-                    className="floatinglabel-input lg"
-                    style={{ paddingLeft: '3rem', paddingRight: '3rem' }}
-                    value={formData.password} 
-                    onChange={(e) => handleInputChange('password', e.target.value)} 
-                    placeholder=" " 
-                    required
-                  />
-                  <label htmlFor="password" className="floatinglabel-label" style={{ zIndex: 90 }}>Password</label>
-                  <button type="button" className="icon-right hover:text-primary transition-colors" style={{ zIndex: 110 }} onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
-                {errors.password && <p className="bg-danger color-text-light text-sm m-1">{errors.password}</p>}
+  /* आइकन भएको बेला लेबलको सुरुवाती स्थान मिलाउने */
+  .floatinglabel.input-icon-left .floatinglabel-label,
+  .floatinglabel.input-icon-both .floatinglabel-label {
+    left: 2.75rem;
+  }
 
-                <div className="flex-between">
-                  <label className="radio-item">
-                    <input type="checkbox" checked={formData.rememberMe} onChange={(e) => handleInputChange('rememberMe', e.target.checked)} />
-                    <span className="radio-label">Remember me</span>
-                  </label>
-                  <button type="button" className="text-primary hover:underline font-medium text-sm" style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer'
-                  }}>
-                    Forgot password?
-                  </button>
-                </div>
+  /* फोकस वा टेक्स्ट भएपछि लेबल बायाँ सर्ने */
+  .floatinglabel.input-icon-left .floatinglabel-input:focus ~ .floatinglabel-label,
+  .floatinglabel.input-icon-left .floatinglabel-input:not(:placeholder-shown) ~ .floatinglabel-label,
+  .floatinglabel.input-icon-both .floatinglabel-input:focus ~ .floatinglabel-label,
+  .floatinglabel.input-icon-both .floatinglabel-input:not(:placeholder-shown) ~ .floatinglabel-label {
+    left: 0.75rem !important;
+  }
 
-                <button type="submit" disabled={isLoading} className={`filled primary btn-md glow w-full ${isLoading ? 'loading' : ''}`}>
-                  {isLoading ? 'Signing in...' : 'Sign in'}
-                </button>
-              </form>
+  /* ===== STANDARD LABEL - CLEAN FOCUS ===== */
+  .standardlabel {
+    @apply relative w-full;
+  }
 
-              <div className="flex-center my-4">
-                <div className="flex-1" style={{ height: '1px', backgroundColor: 'var(--color-border)' }}></div>
-                <span className="p-3 color-text-muted text-sm">or</span>
-                <div className="flex-1" style={{ height: '1px', backgroundColor: 'var(--color-border)' }}></div>
-              </div>
+  .standardlabel-input {
+    border-bottom: 2px solid var(--color-border) !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    min-height: 2.75rem;
+    transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+    line-height: 1.5;
+    
+    /* क्लिक/ट्याप गर्दा कुनै पनि ring हटाउने */
+    -webkit-tap-highlight-color: transparent !important;
+  }
 
-              <div className="flex flex-col gap-3">
-                <button className="glass outlined primary btn-md w-full">
-                  <Globe size={18} className="mr-2" />
-                  Continue with Google
-                </button>
-                <button className="glass outlined primary btn-md w-full">
-                  <X size={18} className="mr-2" />
-                  Continue with X
-                </button>
-              </div>
+  /* FIXED: Standard label लागि मात्र तलको underline, ring हटाउने */
+  .standardlabel-input:focus {
+    @apply outline-none;
+    border-color: var(--color-primary) !important;
+    border-width: 0 0 2px 0 !important;
+    /* Ring हटाउने र मात्र तलको shadow राख्ने */
+    box-shadow: 0 2px 0 0 var(--color-primary) !important;
+  }
+  
+  /* Focus-visible पनि fix गर्ने */
+  .standardlabel-input:focus-visible {
+    @apply outline-none;
+    box-shadow: 0 2px 0 0 var(--color-primary) !important;
+  }
+  
+  /* Active state पनि fix गर्ने */
+  .standardlabel-input:active {
+    @apply outline-none;
+    box-shadow: 0 2px 0 0 var(--color-primary) !important;
+  }
+  
+  .standardlabel-input:disabled {
+    @apply opacity-50 cursor-not-allowed text-(--color-border);
+    border-color: color-mix(in srgb, var(--color-border), transparent 20%) !important;
+  }
 
-              <p className="mobile-text-center mt-4 mb-0 color-text-muted">
-                Don't have an account?{' '}
-                <button className="text-primary hover:underline font-bold" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-                  Sign up
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+  .standardlabel-label {
+    @apply absolute left-3 top-1/2 -translate-y-1/2
+           text-(--color-text-muted) text-base
+           pointer-events-none bg-transparent;
+    background-color: var(--color-surface) !important;
+    padding: 0 4px;
+    z-index: 100;
+    line-height: 1.1;
+    transition: 
+      top 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+      left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-      <div className="fixed absolute-top-left absolute-bottom-right overflow-hidden pointer-events-none" style={{ zIndex: -10 }}>
-        <div className="absolute absolute-top-right w-80 h-80 rounded-full blur-3xl animate-pulse bg-primary" style={{
-          opacity: 0.2,
-          top: '-10rem',
-          right: '-10rem'
-        }}></div>
-        <div className="absolute absolute-bottom-left w-80 h-80 rounded-full blur-3xl animate-pulse bg-accent" style={{
-          opacity: 0.2,
-          bottom: '-10rem',
-          left: '-10rem',
-          animationDelay: '1s'
-        }}></div>
-      </div>
-    </div>
-  )
+  .standardlabel-input:focus ~ .standardlabel-label,
+  .standardlabel-input:not(:placeholder-shown) ~ .standardlabel-label {
+    top: 0 !important;
+    transform: translateY(0) !important;
+    font-size: 0.875rem;
+    color: var(--color-primary);
+    left: 0.75rem !important;
+  }
+
+  /* ===== REGULAR INPUTS WITH ICONS - CLEAN FOCUS ===== */
+  .input-icon-left {
+    @apply relative w-full;
+  }
+  .input-icon-left > svg {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-(--color-text-muted);
+    z-index: 10;
+  }
+  .input-icon-left > input,
+  .input-icon-left > select {
+    @apply w-full pl-10 pr-3 py-2 rounded-md border-2 
+           border-(--color-border) bg-(--color-surface);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* FIXED: Clean focus for icon inputs */
+  .input-icon-left > input:focus,
+  .input-icon-left > select:focus {
+    @apply outline-none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
+  }
+
+  .input-icon-right {
+    @apply relative w-full;
+  }
+  .input-icon-right > svg {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-(--color-text-muted);
+    z-index: 10;
+  }
+  .input-icon-right > input,
+  .input-icon-right > select {
+    @apply w-full pl-3 pr-10 py-2 rounded-md border-2 
+           border-(--color-border) bg-(--color-surface);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* FIXED: Clean focus for icon inputs */
+  .input-icon-right > input:focus,
+  .input-icon-right > select:focus {
+    @apply outline-none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
+  }
+
+  .input-icon-both {
+    @apply relative w-full;
+  }
+  .input-icon-both > .icon-left {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 
+           w-5 h-5 text-(--color-text-muted) pointer-events-none z-20;
+  }
+  .input-icon-both > .icon-right {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 
+           w-5 h-5 text-(--color-text-muted) cursor-pointer z-30;
+    pointer-events: auto;
+  }
+  .input-icon-both > input,
+  .input-icon-both > select {
+    @apply w-full pl-10 pr-10 py-2 rounded-md border-2 
+           border-(--color-border) bg-(--color-surface);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* FIXED: Clean focus for both icon inputs */
+  .input-icon-both > input:focus,
+  .input-icon-both > select:focus {
+    @apply outline-none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent);
+  }
+
+  /* ===== THEME-AWARE FOCUS STYLES ===== */
+  /* Danphe theme लाई अलग focus style */
+  [data-theme="danphe"] {
+    /* Radio focus */
+    .radio-item input[type="radio"]:focus-visible {
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 20%, transparent);
+    }
+    
+    /* Checkbox focus */
+    input[type="checkbox"]:focus-visible {
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 20%, transparent);
+    }
+    
+    /* Select focus */
+    .select:focus {
+      border-color: var(--color-danphe-primary);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 15%, transparent);
+    }
+    
+    /* Floating label focus */
+    .floatinglabel-input:focus {
+      border-color: var(--color-danphe-primary);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 15%, transparent);
+    }
+    
+    .floatinglabel-input:focus ~ .floatinglabel-label {
+      color: var(--color-danphe-primary);
+    }
+    
+    /* Standard label focus - ring हटाउने */
+    .standardlabel-input:focus {
+      border-color: var(--color-danphe-primary) !important;
+      box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
+    }
+    
+    .standardlabel-input:focus-visible {
+      box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
+    }
+    
+    .standardlabel-input:active {
+      box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
+    }
+    
+    .standardlabel-input:focus ~ .standardlabel-label {
+      color: var(--color-danphe-primary);
+    }
+    
+    /* Icon inputs focus */
+    .input-icon-left > input:focus,
+    .input-icon-left > select:focus,
+    .input-icon-right > input:focus,
+    .input-icon-right > select:focus,
+    .input-icon-both > input:focus,
+    .input-icon-both > select:focus {
+      border-color: var(--color-danphe-primary);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 15%, transparent);
+    }
+  }
+
+  /* Dark mode adjustments */
+  [data-theme-mode="dark"] {
+    /* Focus rings अझ soft बनाउने */
+    .radio-item input[type="radio"]:focus-visible,
+    input[type="checkbox"]:focus-visible,
+    .select:focus,
+    .floatinglabel-input:focus,
+    .input-icon-left > input:focus,
+    .input-icon-left > select:focus,
+    .input-icon-right > input:focus,
+    .input-icon-right > select:focus,
+    .input-icon-both > input:focus,
+    .input-icon-both > select:focus {
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 25%, transparent);
+    }
+    
+    /* Standard label dark mode - ring हटाउने */
+    .standardlabel-input:focus {
+      box-shadow: 0 2px 0 0 var(--color-primary) !important;
+    }
+    
+    .standardlabel-input:focus-visible {
+      box-shadow: 0 2px 0 0 var(--color-primary) !important;
+    }
+    
+    .standardlabel-input:active {
+      box-shadow: 0 2px 0 0 var(--color-primary) !important;
+    }
+    
+    /* Danphe theme dark mode */
+    [data-theme="danphe"] & {
+      .radio-item input[type="radio"]:focus-visible,
+      input[type="checkbox"]:focus-visible,
+      .select:focus,
+      .floatinglabel-input:focus,
+      .input-icon-left > input:focus,
+      .input-icon-left > select:focus,
+      .input-icon-right > input:focus,
+      .input-icon-right > select:focus,
+      .input-icon-both > input:focus,
+      .input-icon-both > select:focus {
+        box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-danphe-primary) 25%, transparent);
+      }
+      
+      /* Standard label dark mode Danphe */
+      .standardlabel-input:focus {
+        box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
+      }
+      
+      .standardlabel-input:focus-visible {
+        box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
+      }
+      
+      .standardlabel-input:active {
+        box-shadow: 0 2px 0 0 var(--color-danphe-primary) !important;
+      }
+    }
+  }
 }
