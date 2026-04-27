@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Eye, EyeOff, Mail, Lock, Chrome, Twitter } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Globe, X } from 'lucide-react'
 
 export default function App() {
   const [formData, setFormData] = useState({
@@ -159,12 +159,12 @@ export default function App() {
 
               <div className="flex flex-col gap-3">
                 <button className="glass outlined primary btn-md w-full">
-                  <Chrome size={18} className="mr-2" />
+                  <Globe size={18} className="mr-2" />
                   Continue with Google
                 </button>
                 <button className="glass outlined primary btn-md w-full">
-                  <Twitter size={18} className="mr-2" />
-                  Continue with Twitter
+                  <X size={18} className="mr-2" />
+                  Continue with X
                 </button>
               </div>
 
