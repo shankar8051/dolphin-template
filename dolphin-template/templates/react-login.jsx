@@ -160,8 +160,8 @@ export default function App() {
               </div>
 
               {/* Remember Me & Forgot Password */}
-              <div className="flex justify-between items-center">
-                <label>
+              <div className="flex justify-between items-center" style={{ marginTop: '1rem' }}>
+                <label className='flex gap-2'>
                   <input
                     type="checkbox"
                     checked={formData.rememberMe}
